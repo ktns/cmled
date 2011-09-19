@@ -1,0 +1,50 @@
+#!/usr/bin/ruby
+
+$skipped=false
+
+require 'optparse'
+ARGV.options do|opt|
+	opt.on('-o OUT', 'Specify output files'){|val| $out=val}
+end
+ARGV.parse!
+
+xyz=ARGV.grep(/.xyz$/).first
+xyz_pos = File.open(xyz, 'r') do |f|
+f.collect do |l|
+	if l =~ /^\d+$/
+		raise if $skipped
+		$skipped=true
+		f.gets
+		next
+	end
+	l.scan(/([[:alpha:]]{1,2})\s+(-?\d*\.?\d+)\s+(-?\d*\.?\d+)\s+(-?\d*\.?\d+)/).first
+end
+end.compact
+
+require 'rexml/document'
+
+cml=ARGV.grep(/.cml$/).first
+
+cml_doc = REXML::Document.new(
+File.open(cml,'r',&:read)
+)
+
+cml_doc.elements.each('molecule/atomArray/atom') do |atom|
+	pos = xyz_pos.shift
+	raise 'Element unmatch %s,%s'% [pos.first, atom.attribute(
+	'elementType')] unless pos.first == atom.attribute('elementType').to_s
+	%w<x3 y3 z3>.each_with_index do |coord, i|
+		atom.attributes[coord]=pos[i+1]
+	end
+end
+
+if $out
+	if File.exists?($out)
+		File.rename($out, $out+'~')
+	end
+	File.open($out, 'w') do |f|
+		f.puts cml_doc.to_s
+	end
+else
+	puts cml_doc.to_s
+end
