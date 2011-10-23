@@ -15,45 +15,79 @@ MassTable.freeze
 
 MatrixFormat = ((('% 11.3f '*3).rstrip+"\n")*3).freeze
 
+ZeroVector=Vector[0,0,0].freeze
+
 class MassPoint
 	def initialize x,y,z,m
 		@m=m
 		@coords=Vector[x,y,z]
 	end
 
+	attr_reader :m, :coords
+	alias mass m
+
+	def moment center=ZeroVector
+		(@coords - center) * @m
+	end
+
+	def inertia center=ZeroVector
+		m=moment(center)
+		m.inner_product(m)*Matrix.identity(3) -
+			m*m.covector
+	end
+end
+
+class MassPoints
+	def initialize *points
+		if error=points.find{|p| not p.instance_of?(MassPoint)}
+			raise TypeError, 'Expected "%p" but "%p"' % [MassPoint, error.class]
+		end
+		@points=points
+	end
+
+	def center
+		mass,moment=@points.inject([0,ZeroVector]) do |(mass,moment),point|
+			[mass+point.mass, moment+point.moment]
+		end
+		moment*(1/mass)
+	end
+
 	def inertia
-		(
-			@coords.inner_product(@coords)*Matrix.identity(3) -
-			@coords*@coords.covector
-		)*@m
+		center=center()
+		@points.inject(Matrix.zero(3)) do |inertia, point|
+			inertia + point.inertia(center)
+		end
 	end
 end
 
 doc = REXML::Document.new($stdin)
 
-raw_inertia = doc.get_elements('molecule/atomArray/atom').collect do |atom|
+points = MassPoints.new *(doc.get_elements('molecule/atomArray/atom').collect do |atom|
 	MassPoint.new(
 		atom.attribute('x3').to_s.to_f,
 		atom.attribute('y3').to_s.to_f,
 		atom.attribute('z3').to_s.to_f,
 		MassTable[atom.attribute('elementType').to_s]
 	)
-end.inject(Matrix.zero(3)) do |inertia,point|
-	inertia+point.inertia
-end
+end)
+
+puts 'center of gravity = ' + (['%8.3f']*3).join(', ') % points.center.to_a
+
+raw_inertia = points.inertia
 
 puts 'raw inertia:', MatrixFormat%raw_inertia.to_a.flatten
 
-puts 'diagonalized inertia:'
 begin
 	require 'gsl'
-
-	raw_inertia  = GSL::Matrix[*raw_inertia.to_a]
-	evals, evects = raw_inertia.eigen_symmv
-	GSL::Eigen::symmv_sort(evals,evects)
-	[evals.to_a, Enumerable::Enumerator.new(evects,:each_col).to_a].transpose.each_with_index do |valvec,i|
-		val,vec=valvec
-		puts 'I%d: %8.3f, axis(% 7f, % 7f, % 7f)' % [i+1, val, *vec]
-	end
 rescue LoadError
+	exit 0
+end
+
+puts 'diagonalized inertia:'
+raw_inertia  = GSL::Matrix[*raw_inertia.to_a]
+evals, evects = raw_inertia.eigen_symmv
+GSL::Eigen::symmv_sort(evals,evects)
+[evals.to_a, Enumerable::Enumerator.new(evects,:each_col).to_a].transpose.each_with_index do |valvec,i|
+	val,vec=valvec
+	puts 'I%d: %8.3f, axis(% 7f, % 7f, % 7f)' % [i+1, val, *vec]
 end
