@@ -92,6 +92,7 @@ GSL::Eigen::symmv_sort(evals,evects)
 	$stderr.puts 'I%d: %8.3f, axis(% 7f, % 7f, % 7f)' % [i+1, val, *vec]
 end
 
+abort 'Determinant is negative!' if evects.det < 0
 center=GSL::Vector[*points.center.to_a]
 doc.get_elements('molecule/atomArray/atom').each do |atom|
 	v=GSL::Vector[*%w<x3 y3 z3>.collect{|l| atom.attribute(l).to_s.to_f}]
