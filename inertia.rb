@@ -71,11 +71,11 @@ points = MassPoints.new *(doc.get_elements('molecule/atomArray/atom').collect do
 	)
 end)
 
-puts 'center of gravity = ' + (['%8.3f']*3).join(', ') % points.center.to_a
+$stderr.puts 'center of gravity = ' + (['%8.3f']*3).join(', ') % points.center.to_a
 
 raw_inertia = points.inertia
 
-puts 'raw inertia:', MatrixFormat%raw_inertia.to_a.flatten
+$stderr.puts 'raw inertia:', MatrixFormat%raw_inertia.to_a.flatten
 
 begin
 	require 'gsl'
@@ -83,11 +83,22 @@ rescue LoadError
 	exit 0
 end
 
-puts 'diagonalized inertia:'
+$stderr.puts 'diagonalized inertia:'
 raw_inertia  = GSL::Matrix[*raw_inertia.to_a]
 evals, evects = raw_inertia.eigen_symmv
 GSL::Eigen::symmv_sort(evals,evects)
-[evals.to_a, Enumerable::Enumerator.new(evects,:each_col).to_a].transpose.each_with_index do |valvec,i|
+[evals.to_a, evects.transpose.to_a].transpose.each_with_index do |valvec,i|
 	val,vec=valvec
-	puts 'I%d: %8.3f, axis(% 7f, % 7f, % 7f)' % [i+1, val, *vec]
+	$stderr.puts 'I%d: %8.3f, axis(% 7f, % 7f, % 7f)' % [i+1, val, *vec]
 end
+
+center=GSL::Vector[*points.center.to_a]
+doc.get_elements('molecule/atomArray/atom').each do |atom|
+	v=GSL::Vector[*%w<x3 y3 z3>.collect{|l| atom.attribute(l).to_s.to_f}]
+	v-=center
+	v*=evects
+	[%w<x3 y3 z3>, v.to_a].transpose.each do |l,v|
+		atom.attributes[l]=v
+	end
+end
+puts doc
