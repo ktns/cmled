@@ -8,7 +8,7 @@ ARGV.options do|opt|
 end
 ARGV.parse!
 
-xyz=ARGV.grep(/.xyz$/).first
+xyz=ARGV.grep(/.xyz~?$/).first
 xyz_pos = File.open(xyz, 'r') do |f|
 f.collect do |l|
 	if l =~ /^\d+$/
@@ -23,7 +23,7 @@ end.compact
 
 require 'rexml/document'
 
-cml=ARGV.grep(/.cml$/).first
+cml=ARGV.grep(/.cml~?$/).first
 
 cml_doc = REXML::Document.new(
 File.open(cml,'r',&:read)
