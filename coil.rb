@@ -14,7 +14,7 @@ doc.get_elements('molecule/atomArray/atom').collect do |atom|
 	c = Complex.new(x,y) * rotator
 	x,y = c.real, c.imag
 	z += radius
-	c = Complex.new(z,0) * Math.exp(Complex::I * y / radius)
+	c = Complex.polar(z, y / radius)
 	z,y = c.real, c.imag
 	[[x,y,z],%w<x y z>].transpose.each do |v,l|
 		atom.attributes[l+'3'] = '%.6f' % v
