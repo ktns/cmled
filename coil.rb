@@ -16,7 +16,7 @@ doc.get_elements('molecule/atomArray/atom').collect do |atom|
 	z += radius
 	c = Complex.new(z,0) * Math.exp(Complex::I * y / radius)
 	z,y = c.real, c.imag
-	[[x,y,z],%w<x y z>].transpose.each do |v,l|
+	[[z,y,x],%w<x y z>].transpose.each do |v,l|
 		atom.attributes[l+'3'] = '%.6f' % v
 	end
 end
