@@ -1,0 +1,37 @@
+#! /usr/bin/env ruby
+
+require 'rexml/document'
+ATOM_XPATH='/molecule/atomArray/atom'
+BOND_XPATH='/molecule/bondArray/bond'
+
+ARGV.each do |cml|
+	File.open(cml, 'r') do |f|
+		$cmldoc = REXML::Document.new(f)
+	end
+	unless $doc
+		$doc = $cmldoc
+		$maxid=$doc.elements.enum_for(:each, ATOM_XPATH).collect do |atom|
+			atom.attributes['id'].scan(/\d+/).first.to_i
+		end.max
+		$doc_atomarray=$doc.elements['/molecule/atomArray']
+		$doc_bondarray=$doc.elements['/molecule/bondArray']
+	else
+		$table=Hash.new{raise}
+		$offset=$maxid
+		$cmldoc.elements.each(ATOM_XPATH) do |atom|
+			i=atom.attributes['id'].scan(/\d+/).first.to_i
+			raise unless i>0
+			$maxid=[$maxid,i+$offset].max
+			id='a%d' % (i+$offset)
+			$table[atom.attributes['id']]=id
+			atom.attributes['id']=id
+			$doc_atomarray<<atom
+		end
+		$cmldoc.elements.each(BOND_XPATH) do |bond|
+			id1,id2=bond.attributes['atomRefs2'].split(/\s+/)
+			bond.attributes['atomRefs2']=[$table[id1],$table[id2]].join(' ')
+			$doc_bondarray<<bond
+		end
+	end
+end
+$doc.write($stdout, 2)
