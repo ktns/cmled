@@ -1,7 +1,11 @@
 #! /usr/bin/env ruby
+$LOAD_PATH << File.join(File.dirname(__FILE__), *%w<.. lib>)
 
 require 'rexml/document'
 require 'matrix'
+require 'cmled'
+
+include CMLed
 
 MassTable={
 	'H' => 1.007947,
