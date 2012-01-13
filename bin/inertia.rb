@@ -7,16 +7,6 @@ require 'cmled'
 
 include CMLed
 
-MassTable={
-	'H' => 1.007947,
-	'C' => 12.0107,
-	'N' => 14.00672,
-	'O' => 15.99943,
-	'S' => 32.0655,
-}
-MassTable.default=0
-MassTable.freeze
-
 MatrixFormat = ((('% 11.3f '*3).rstrip+"\n")*3).freeze
 
 ZeroVector=Vector[0,0,0].freeze
