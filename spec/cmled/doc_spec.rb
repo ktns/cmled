@@ -83,5 +83,11 @@ describe CMLed::Doc do
 		it 'should return rotatedcml' do
 			@doc.rotate(:x,90).pretty.should == @rotatedstr
 		end
+
+		it 'should not change original document' do
+			str = @doc.to_s
+			@doc.rotate(:x,180)
+			@doc.to_s.should == str
+		end
 	end
 end
