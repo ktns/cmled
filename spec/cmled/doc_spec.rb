@@ -9,5 +9,11 @@ describe CMLed::Doc do
 				end
 			end.should_not raise_error
 		end
+		
+		it 'should not accept bad string' do
+			lambda do
+				CMLed::Doc.new 'hoge'
+			end.should raise_error
+		end
 	end
 end
