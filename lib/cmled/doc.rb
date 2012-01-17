@@ -3,6 +3,7 @@ module CMLed
 	class Doc
 		def initialize *args
 			@doc = REXML::Document.new(*args)
+			raise ArgumentError if molecules.empty?
 		end
 
 		def write *args
