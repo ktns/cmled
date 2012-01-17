@@ -1,6 +1,10 @@
 require 'rexml/document'
 require 'stringio'
 
+unless defined? Enumerator
+	Enumerator = Enumerable::Enumerator
+end
+
 module CMLed
 	class Doc
 		def initialize *args
