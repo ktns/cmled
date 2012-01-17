@@ -47,17 +47,12 @@ describe CMLed::Doc do
 			@rotateddoc = IO.popen("#{bin_path('rotatecml')} x 90 < #{fixture_path('benzene.cml')} 2>/dev/null", 'r') do |io|
 				CMLed::Doc.new(io)
 			end
-			io = StringIO.new('', 'w')
-			@rotateddoc.write(io)
-			io.close
-			@rotatedstr = io.string
+			@rotatedstr = @rotateddoc.pretty
 		end
 
 		it 'should return rotatedcml' do
 			io = StringIO.new('', 'w')
-			@doc.rotate(:x,90).write(io)
-			io.close
-			io.string.should == io.string
+			@doc.rotate(:x,90).pretty.should == @rotatedstr
 		end
 	end
 end
