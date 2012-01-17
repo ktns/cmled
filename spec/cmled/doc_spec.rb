@@ -30,6 +30,35 @@ describe CMLed::Doc do
 		end
 	end
 
+	describe '#each_molecule' do
+		describe 'without block' do
+			before do
+				@enumerator = @doc.each_molecule
+			end
+
+			it 'should return Enumerator if block is not given' do
+				@enumerator.should be_instance_of Enumerator
+			end
+
+			it 'should have proper count of enum' do
+				@enumerator.count.should == 1
+			end
+
+			it 'should enumerate same molecules as with block' do
+				@doc.each_molecule do |m|
+					a.delete(m).should_not be_nil
+				end
+				a.should be_empty
+			end
+		end
+
+		it 'should enumerate CMLed::DocDoc::Molecule' do
+			@doc.each_molecule do |m|
+				m.should be_instance_of CMLed::Doc::Molecule
+			end
+		end
+	end
+
 	describe '#molecules' do
 		it 'should return an array of CMLed::Doc::Molecule' do
 			@doc.molecules.each do |mol|
