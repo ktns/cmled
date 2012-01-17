@@ -1,4 +1,6 @@
 require 'rexml/document'
+require 'stringio'
+
 module CMLed
 	class Doc
 		def initialize *args
@@ -12,6 +14,13 @@ module CMLed
 
 		def write *args
 			@doc.write *args
+		end
+
+		def pretty *args
+			io = StringIO.new('','w')
+			write(io,*args)
+			io.close
+			io.string
 		end
 
 		def molecules
