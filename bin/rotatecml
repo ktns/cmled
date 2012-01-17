@@ -1,33 +1,12 @@
 #! /usr/bin/env ruby
-require 'rexml/document'
-unless Kernel.const_defined? :Complex
-	require 'complex'
-end
+$LOAD_PATH << File.join(File.dirname(__FILE__), *%w<.. lib>)
+require 'cmled'
 
-case $axis=ARGV.shift
-when 'X','x'
-	$coords = %w<y3 z3 x3>
-when 'Y','y'
-	$coords = %w<z3 x3 y3>
-when 'Z','z'
-	$coords = %w<x3 y3 z3>
-else
-	raise 'Unacceptable axis `%s\'!' % $axis
-end
-
+axis=ARGV.shift
 rotate_angle = ARGV.shift.to_f
-$stderr.puts 'rotate %f degrees around the %s-axis' % [rotate_angle, $axis]
-rotator = Complex.polar(1,rotate_angle * 2 * Math::PI / 360)
+$stderr.puts 'rotate %f degrees around the %s-axis' % [rotate_angle, axis]
 
-doc = REXML::Document.new($stdin)
-doc.get_elements('molecule/atomArray/atom').collect do |atom|
-	#rotation axis last
-	x,y,z = $coords.collect{|l| atom.attribute(l).to_s.to_f}
-	c     = Complex(x,y) * rotator
-	x,y   = c.real, c.imag
-	[$coords,[x,y,z]].transpose.each do |l,v|
-		atom.attributes[l] = v
-	end
-end
+doc = CMLed::Doc.new(ARGF)
+doc.rotate(axis, rotate_angle)
 
-puts doc
+doc.write($stdout)
