@@ -4,5 +4,9 @@ module CMLed
 		def initialize *args
 			@doc = REXML::Document.new(*args)
 		end
+
+		def write *args
+			@doc.write *args
+		end
 	end
 end
