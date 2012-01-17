@@ -16,9 +16,9 @@ Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "cmled"
   gem.homepage = "http://github.com/ktns/cmled"
-  gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.license = "GPLv3"
+  gem.summary = %Q{CML edit scripts}
+  gem.description = %Q{This package provides some scripts to edit Chemical Markup Language files}
   gem.email = "ktns.87@gmail.com"
   gem.authors = ["Katsuhiko Nishimra"]
   # dependencies defined in Gemfile
