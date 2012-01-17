@@ -45,6 +45,7 @@ describe CMLed::Doc do
 			end
 
 			it 'should enumerate same molecules as with block' do
+				a=@enumerator.to_a
 				@doc.each_molecule do |m|
 					a.delete(m).should_not be_nil
 				end
