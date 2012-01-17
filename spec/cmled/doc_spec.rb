@@ -73,14 +73,11 @@ describe CMLed::Doc do
 	end
 
 	describe '#rotate' do
-		before :all do
+		it 'should return rotatedcml' do
 			@rotateddoc = IO.popen("#{bin_path('rotatecml')} x 90 < #{fixture_path('benzene.cml')} 2>/dev/null", 'r') do |io|
 				CMLed::Doc.new(io)
 			end
 			@rotatedstr = @rotateddoc.pretty
-		end
-
-		it 'should return rotatedcml' do
 			@doc.rotate(:x,90).pretty.should == @rotatedstr
 		end
 
