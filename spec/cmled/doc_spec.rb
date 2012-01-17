@@ -38,4 +38,22 @@ describe CMLed::Doc do
 			io2.string.should == io3.string
 		end
 	end
+
+	describe '#molecules' do
+		before do
+			fixture_open('benzene.cml') do |f|
+				@doc = CMLed::Doc.new f
+			end
+		end
+
+		it 'should return an array of CMLed::Doc::Molecule' do
+			@doc.molecules.each do |mol|
+				mol.should be_kind_of? CMLed::Doc::Molecule
+			end
+		end
+
+		it 'should have proper size' do
+			@doc.molecules.size.should == 1
+		end
+	end
 end
