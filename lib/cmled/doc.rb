@@ -23,6 +23,16 @@ module CMLed
 			io.string
 		end
 
+		def each_molecule &block
+			if block
+				proc=proc{|elem| block.call Molecule.new(elem)}
+				@doc.get_elements('/molecule').each &proc
+				@doc.get_elements('/cml/molecule').each &proc
+			else
+				Enumerator.new(self,:each_molecule)
+			end
+		end
+
 		def molecules
 			[@doc.get_elements('/molecule'),
 				@doc.get_elements('/cml/molecule')].flatten.compact.collect do |mol|
