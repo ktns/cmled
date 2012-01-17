@@ -16,6 +16,17 @@ module CMLed
 				Molecule.new mol
 			end
 		end
+		
+		def rotate *args
+			dup.rotate! *args
+		end
+
+		def rotate! *args
+			molecules.each do |mol|
+				mol.rotate! *args
+			end
+			self
+		end
 	end
 end
 
