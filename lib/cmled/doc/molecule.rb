@@ -36,6 +36,15 @@ module CMLed
 					end
 				end
 			end
+
+			def == other
+				rexml_element == other.rexml_element
+			end
+
+			protected
+			def rexml_element
+				@elem
+			end
 		end
 	end
 end
