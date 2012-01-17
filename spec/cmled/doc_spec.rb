@@ -1,4 +1,5 @@
 require File.expand_path(File.join(File.dirname(__FILE__), %w<..>, 'spec_helper'))
+require 'stringio'
 
 describe CMLed::Doc do
 	describe '.new' do
@@ -14,6 +15,27 @@ describe CMLed::Doc do
 			lambda do
 				CMLed::Doc.new 'hoge'
 			end.should raise_error
+		end
+	end
+
+	describe '.write' do
+		before do
+			fixture_open('benzene.cml') do |f|
+				@doc = CMLed::Doc.new f
+			end
+		end
+
+		it 'should produce identical string from source' do
+			io1  = StringIO.new('','w')
+			@doc.write(io1)
+			io1.close
+			io2  = StringIO.new(io1.string,'r')
+			doc2 = CMLed::Doc.new(io2)
+			io2.close
+			io3  = StringIO.new('','w')
+			doc2.write(io3)
+			io3.close
+			io2.string.should == io3.string
 		end
 	end
 end
