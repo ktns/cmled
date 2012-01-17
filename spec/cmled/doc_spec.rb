@@ -4,7 +4,9 @@ describe CMLed::Doc do
 	describe '.new' do
 		it 'should accept fixture/benzene.cml' do
 			lambda do
-				CMLed::Doc.new File.join(fixture_dir,'benzene.cml')
+				fixture_open('benzene.cml') do |f|
+					CMLed::Doc.new f
+				end
 			end.should_not raise_error
 		end
 	end
