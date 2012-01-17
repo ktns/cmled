@@ -18,7 +18,7 @@ describe CMLed::Doc do
 		end
 	end
 
-	describe '.write' do
+	describe '#write' do
 		before do
 			fixture_open('benzene.cml') do |f|
 				@doc = CMLed::Doc.new f
