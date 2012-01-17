@@ -81,7 +81,6 @@ describe CMLed::Doc do
 		end
 
 		it 'should return rotatedcml' do
-			io = StringIO.new('', 'w')
 			@doc.rotate(:x,90).pretty.should == @rotatedstr
 		end
 	end
