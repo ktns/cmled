@@ -10,6 +10,14 @@ module CMLed
 				@elem = element
 			end
 
+			def each_atoms &block
+				if block
+					@elem.get_elements('atomArray/atom').each &block
+				else
+					Enumerator.new(self,each_atoms)
+				end
+			end
+
 			def rotate! axis, angle
 				coords =
 					case axis
