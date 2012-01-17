@@ -2,6 +2,12 @@ require File.expand_path(File.join(File.dirname(__FILE__), %w<..>, 'spec_helper'
 require 'stringio'
 
 describe CMLed::Doc do
+	before do
+		fixture_open('benzene.cml') do |f|
+			@doc = CMLed::Doc.new f
+		end
+	end
+
 	describe '.new' do
 		it 'should accept fixture/benzene.cml' do
 			lambda do
@@ -10,7 +16,7 @@ describe CMLed::Doc do
 				end
 			end.should_not raise_error
 		end
-		
+
 		it 'should not accept bad string' do
 			lambda do
 				CMLed::Doc.new 'hoge'
@@ -19,12 +25,6 @@ describe CMLed::Doc do
 	end
 
 	describe '#write' do
-		before do
-			fixture_open('benzene.cml') do |f|
-				@doc = CMLed::Doc.new f
-			end
-		end
-
 		it 'should produce identical string from source' do
 			io1  = StringIO.new('','w')
 			@doc.write(io1)
@@ -40,12 +40,6 @@ describe CMLed::Doc do
 	end
 
 	describe '#molecules' do
-		before do
-			fixture_open('benzene.cml') do |f|
-				@doc = CMLed::Doc.new f
-			end
-		end
-
 		it 'should return an array of CMLed::Doc::Molecule' do
 			@doc.molecules.each do |mol|
 				mol.should be_kind_of CMLed::Doc::Molecule
