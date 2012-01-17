@@ -7,6 +7,10 @@ def fixture_dir
 	File.expand_path(File.join(File.dirname(__FILE__), 'fixtures'))
 end
 
+def fixture_path *fn
+	File.join(fixture_dir,*fn)
+end
+
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
