@@ -11,6 +11,14 @@ def fixture_path *fn
 	File.join(fixture_dir,*fn)
 end
 
+def fixture_open *fn
+	if block_given?
+		File.open(fixture_path(*fn)){yield}
+	else
+		File.open(fixture_path(*fn))
+	end
+end
+
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
