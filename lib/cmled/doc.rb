@@ -6,6 +6,10 @@ module CMLed
 			raise ArgumentError if molecules.empty?
 		end
 
+		def to_s
+			@doc.to_s
+		end
+
 		def write *args
 			@doc.write *args
 		end
