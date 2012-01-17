@@ -19,12 +19,8 @@ def fixture_path *fn
 	File.join(fixture_dir,*fn)
 end
 
-def fixture_open *fn
-	if block_given?
-		File.open(fixture_path(*fn)){|f| yield f}
-	else
-		File.open(fixture_path(*fn),'r')
-	end
+def fixture_open *fn, &block
+	File.open(fixture_path(*fn),'r',&block)
 end
 
 # Requires supporting files with custom matchers and macros, etc,
