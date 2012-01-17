@@ -7,6 +7,10 @@ def bin_dir
 	File.expand_path(File.join(File.dirname(__FILE__), %w<.. bin>))
 end
 
+def bin_path *fn
+	File.join(bin_dir,*fn)
+end
+
 def fixture_dir
 	File.expand_path(File.join(File.dirname(__FILE__), 'fixtures'))
 end
