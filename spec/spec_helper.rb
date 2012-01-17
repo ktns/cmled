@@ -15,7 +15,7 @@ def fixture_open *fn
 	if block_given?
 		File.open(fixture_path(*fn)){yield}
 	else
-		File.open(fixture_path(*fn))
+		File.open(fixture_path(*fn),'r')
 	end
 end
 
