@@ -3,6 +3,10 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'rspec'
 require 'cmled'
 
+def bin_dir
+	File.expand_path(File.join(File.dirname(__FILE__), %w<.. bin>))
+end
+
 def fixture_dir
 	File.expand_path(File.join(File.dirname(__FILE__), 'fixtures'))
 end
