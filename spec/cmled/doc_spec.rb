@@ -48,7 +48,7 @@ describe CMLed::Doc do
 
 		it 'should return an array of CMLed::Doc::Molecule' do
 			@doc.molecules.each do |mol|
-				mol.should be_kind_of? CMLed::Doc::Molecule
+				mol.should be_kind_of CMLed::Doc::Molecule
 			end
 		end
 
