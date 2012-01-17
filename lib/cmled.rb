@@ -10,3 +10,5 @@ module CMLed
 	MassTable.default=0
 	MassTable.freeze
 end
+
+require 'cmled/doc.rb'
