@@ -54,7 +54,7 @@ module CMLed
 		end
 
 		def rotate! *args
-			molecules.each do |mol|
+			each_molecule do |mol|
 				mol.rotate! *args
 			end
 			self
