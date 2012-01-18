@@ -54,6 +54,7 @@ module CMLed
 			each_molecule do |mol|
 				mol.translate! *args
 			end
+			self
 		end
 		
 		def rotate *args
