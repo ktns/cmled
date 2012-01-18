@@ -3,7 +3,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), %w<..>*3, 'spec_helpe
 describe CMLed::Doc::Molecule::AtomAttributes do
 	before :each do
 		@doc = REXML::Document.new(<<EOF)
-		<atom id="a1" elementType="C" x3="0.000000" y3="0.000000" z3="0.000000" hoge="hoge"/>
+		<atom id="a1" elementType="C" x3="1" y3="2" z3="3" hoge="hoge"/>
 EOF
 		@atom = @doc.root
 		@attributes = @atom.attributes
@@ -23,6 +23,46 @@ EOF
 
 		it 'should not drop any pair' do
 			@array.any?{|attribute| attribute == @attributes.get_attribute('hoge')}.should be_true
+		end
+	end
+end
+
+describe CMLed::Doc::Molecule::Atom do
+	before :each do
+		@doc = REXML::Document.new(<<EOF)
+		<atom id="a1" elementType="C" x3="0.000000" y3="0.000000" z3="0.000000" hoge="hoge"/>
+EOF
+		@atom = CMLed::Doc::Molecule::Atom.new(@atom)
+	end
+
+	describe '#complex[]' do
+		shared_examples_for CMLed::Doc::Molecule::Atom::Complex do
+			it 'should return a proper Complex' do
+				axes.each do |axis|
+					@atom.complex[axis].should be_close value 1e6
+				end
+			end
+		end
+
+		context 'with x axis' do
+			it_behaves_like CMLed::Doc::Molecule::Atom::Complex do
+				let(:axes){ ['x', 'X', :x , :X] }
+				let(:value){ Complex(2,3) }
+			end
+		end
+
+		context 'with y axis' do
+			it_behaves_like CMLed::Doc::Molecule::Atom::Complex do
+				let(:axes){ ['y', 'Y', :y , :Y] }
+				let(:value){ Complex(3,1) }
+			end
+		end
+
+		context 'with z axis' do
+			it_behaves_like CMLed::Doc::Molecule::Atom::Complex do
+				let(:axes){ ['z', 'Z', :z , :Z] }
+				let(:value){ Complex(1,2) }
+			end
 		end
 	end
 end

@@ -32,6 +32,10 @@ module CMLed
 					end
 				end
 			end
+
+			class Atom
+
+			end
 		end
 	end
 end
