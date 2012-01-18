@@ -30,16 +30,16 @@ end
 describe CMLed::Doc::Molecule::Atom do
 	before :each do
 		@doc = REXML::Document.new(<<EOF)
-		<atom id="a1" elementType="C" x3="0.000000" y3="0.000000" z3="0.000000" hoge="hoge"/>
+		<atom id="a1" elementType="C" x3="1" y3="2" z3="3" hoge="hoge"/>
 EOF
-		@atom = CMLed::Doc::Molecule::Atom.new(@atom)
+		@atom = CMLed::Doc::Molecule::Atom.new(@doc.root)
 	end
 
 	describe '#complex[]' do
 		shared_examples_for CMLed::Doc::Molecule::Atom::Complex do
 			it 'should return a proper Complex' do
 				axes.each do |axis|
-					@atom.complex[axis].should be_close value 1e6
+					@atom.complex[axis].should be_close value, 1e-6
 				end
 			end
 		end

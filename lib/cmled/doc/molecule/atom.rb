@@ -34,7 +34,46 @@ module CMLed
 			end
 
 			class Atom
+				def initialize elem
+					raise TypeError unless elem.kind_of? REXML::Element
+					@elem = elem
+				end
 
+				class Complex
+					def initialize parent
+						raise TypeError unless parent.kind_of? Atom
+						@parent = parent
+					end
+
+					def self.labels axis
+						case axis
+						when /\Ax\Z/i
+							%w<y3 z3>
+						when /\Ay\Z/i
+							%w<z3 x3>
+						when /\Az\Z/i
+							%w<x3 y3>
+						when String
+							raise ArgumentError, 'Unacceptable axis `%s\'!' % axis
+						else
+							return labels axis.to_s
+						end
+					end
+
+					def [] axis
+						Complex(*Complex.labels(axis).collect do |l|
+							@parent.attributes[l].to_s.to_f
+						end)
+					end
+				end
+
+				def complex
+					Complex.new(self)
+				end
+
+				def attributes
+					@elem.attributes.extend AtomAttributes
+				end
 			end
 		end
 	end
