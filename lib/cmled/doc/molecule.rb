@@ -57,11 +57,11 @@ module CMLed
 				coords =
 					case axis
 					when /\Ax\Z/i
-					%w<y3 z3 x3>
+						%w<y3 z3 x3>
 					when /\Ay\Z/i
-					%w<z3 x3 y3>
+						%w<z3 x3 y3>
 					when /\Az\Z/i
-					%w<x3 y3 z3>
+						%w<x3 y3 z3>
 					when String
 						raise ArgumentError, 'Unacceptable axis `%s\'!' % axis
 					else
