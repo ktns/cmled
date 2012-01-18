@@ -45,10 +45,6 @@ module CMLed
 				end
 			end
 
-			module AtomAttributes
-
-			end
-
 			def each_atoms &block
 				if block
 					@elem.get_elements('atomArray/atom').each &block
