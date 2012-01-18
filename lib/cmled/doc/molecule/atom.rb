@@ -39,6 +39,21 @@ module CMLed
 					@elem = elem
 				end
 
+				def self.labels axis
+					case axis
+					when /\Ax\Z/i
+						%w<x3 y3 z3>
+					when /\Ay\Z/i
+						%w<y3 z3 x3>
+					when /\Az\Z/i
+						%w<z3 x3 y3>
+					when String
+						raise ArgumentError, 'Unacceptable axis `%s\'!' % axis
+					else
+						return labels axis.to_s
+					end
+				end
+
 				class Complex
 					def initialize parent
 						raise TypeError unless parent.kind_of? Atom
@@ -46,18 +61,7 @@ module CMLed
 					end
 
 					def self.labels axis
-						case axis
-						when /\Ax\Z/i
-							%w<y3 z3>
-						when /\Ay\Z/i
-							%w<z3 x3>
-						when /\Az\Z/i
-							%w<x3 y3>
-						when String
-							raise ArgumentError, 'Unacceptable axis `%s\'!' % axis
-						else
-							return labels axis.to_s
-						end
+						Atom.labels(axis)[1,2]
 					end
 
 					def [] axis
