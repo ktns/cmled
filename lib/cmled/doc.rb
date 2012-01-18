@@ -48,6 +48,16 @@ module CMLed
 				Molecule.new mol
 			end
 		end
+
+		def translate *args
+			dup.translate! *args
+		end
+
+		def translate! *args
+			each_molecule do |mol|
+				mol.translate! *args
+			end
+		end
 		
 		def rotate *args
 			dup.rotate! *args
