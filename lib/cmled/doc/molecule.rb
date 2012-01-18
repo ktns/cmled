@@ -1,3 +1,5 @@
+require 'cmled/doc/molecule/atom'
+
 unless defined? Complex
 	require 'complex'
 end
@@ -8,52 +10,16 @@ module CMLed
 			def initialize element
 				raise TypeError unless element.kind_of?(REXML::Element)
 				@elem = element
-				each_atoms do |atom|
+				each_atom do |atom|
 					atom.attributes.extend AtomAttributes
 				end
 			end
 
-			module AtomAttributes
-				def each_attribute &block
-					if block
-						order = %w<id elementType x3 y3 z3>
-						stack = []
-						super do |attribute|
-							if attribute.name == order.first
-								block.call attribute
-								order.shift
-								until order.empty?
-									stack.size.times do
-										stacked = stack.pop
-										if stacked.name == order.first
-											block.call stacked
-											order.shift
-											break false
-										else
-											stack.unshift stacked
-										end
-									end and break
-								end
-							else
-								stack << attribute
-							end
-						end
-						stack.sort_by{|attribute| attribute.name}.each &block
-					else
-						Enumerator.new(self, :each_attribute)
-					end
-				end
-			end
-
-			module AtomAttributes
-
-			end
-
-			def each_atoms &block
+			def each_atom &block
 				if block
 					@elem.get_elements('atomArray/atom').each &block
 				else
-					Enumerator.new(self,each_atoms)
+					Enumerator.new(self,each_atom)
 				end
 			end
 
@@ -85,11 +51,11 @@ module CMLed
 				coords =
 					case axis
 					when /\Ax\Z/i
-					%w<y3 z3 x3>
+						%w<y3 z3 x3>
 					when /\Ay\Z/i
-					%w<z3 x3 y3>
+						%w<z3 x3 y3>
 					when /\Az\Z/i
-					%w<x3 y3 z3>
+						%w<x3 y3 z3>
 					when String
 						raise ArgumentError, 'Unacceptable axis `%s\'!' % axis
 					else
@@ -98,7 +64,7 @@ module CMLed
 
 				rotator = Complex.polar(1, angle * 2 * Math::PI / 360)
 
-				@elem.get_elements('atomArray/atom').collect do |atom|
+				each_atom do |atom|
 					x,y,z = coords.collect{|l| atom.attribute(l).to_s.to_f}
 					c     = Complex(x,y) * rotator
 					x,y   = c.real, c.imag

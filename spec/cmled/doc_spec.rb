@@ -31,7 +31,7 @@ describe CMLed::Doc do
 	end
 
 	describe '#each_molecule' do
-		describe 'without block' do
+		context 'without block' do
 			before do
 				@enumerator = @doc.each_molecule
 			end
