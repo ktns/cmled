@@ -65,6 +65,12 @@ module CMLed
 							@parent.attributes[l].to_s.to_f
 						end)
 					end
+
+					def []= axis, value
+						[[value.real, value.imag], Complex.labels(axis)].transpose.each do |v,l|
+							@parent.attributes[l]=v
+						end
+					end
 				end
 
 				def complex
