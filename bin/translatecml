@@ -1,28 +1,13 @@
 #! /usr/bin/env ruby
-require 'rexml/document'
+$LOAD_PATH << File.join(File.dirname(__FILE__), *%w<.. lib>)
+require 'cmled'
 
-case $axis=ARGV.shift
-when 'X','x'
-	$coords = %w<y3 z3 x3>
-when 'Y','y'
-	$coords = %w<z3 x3 y3>
-when 'Z','z'
-	$coords = %w<x3 y3 z3>
-else
-	raise 'Unacceptable axis `%s\'!' % $axis
-end
+axis=ARGV.shift
 
-translation = ARGV.shift.to_f
-$stderr.puts 'translate %f along the %s-axis' % [translation, $axis]
+length = ARGV.shift.to_f
+$stderr.puts 'translate %f along the %s-axis' % [length, $axis]
 
-doc = REXML::Document.new($stdin)
-doc.get_elements('molecule/atomArray/atom').collect do |atom|
-	#translation axis last
-	x,y,z = $coords.collect{|l| atom.attribute(l).to_s.to_f}
-	z    += translation
-	[$coords,[x,y,z]].transpose.each do |l,v|
-		atom.attributes[l] = v
-	end
-end
+doc = CMLed::Doc.new(ARGF)
+doc.translate!(axis, length)
 
-puts doc
+doc.write($stdout)
