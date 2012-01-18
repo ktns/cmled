@@ -35,7 +35,7 @@ module CMLed
 					when String
 						raise ArgumentError, 'Unacceptable axis `%s\'!' % axis
 					else
-						return rotate! axis.to_s, angle
+						return translate! axis.to_s, length
 					end
 
 				each_atom do |atom|
