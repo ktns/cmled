@@ -57,6 +57,30 @@ module CMLed
 				end
 			end
 
+			def translate! axis, length
+				coords =
+					case axis
+					when /\Ax\Z/i
+						%w<y3 z3 x3>
+					when /\Ay\Z/i
+						%w<z3 x3 y3>
+					when /\Az\Z/i
+						%w<x3 y3 z3>
+					when String
+						raise ArgumentError, 'Unacceptable axis `%s\'!' % axis
+					else
+						return rotate! axis.to_s, angle
+					end
+
+				each_atom do |atom|
+					x,y,z = coords.collect{|l| atom.attribute(l).to_s.to_f}
+					z    += length
+					[coords,[x,y,z]].transpose.each do |l,v|
+						atom.attributes[l] = v
+					end
+				end
+			end
+
 			def rotate! axis, angle
 				coords =
 					case axis
