@@ -12,6 +12,11 @@ module CMLed
 			raise ArgumentError if molecules.empty?
 		end
 
+		def initialize_copy obj
+			super
+			@doc = REXML::Document.new(@doc.to_s)
+		end
+
 		def to_s
 			@doc.to_s
 		end

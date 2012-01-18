@@ -7,6 +7,6 @@ rotate_angle = ARGV.shift.to_f
 $stderr.puts 'rotate %f degrees around the %s-axis' % [rotate_angle, axis]
 
 doc = CMLed::Doc.new(ARGF)
-doc.rotate(axis, rotate_angle)
+doc.rotate!(axis, rotate_angle)
 
 doc.write($stdout)
