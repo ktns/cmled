@@ -35,30 +35,41 @@ EOF
 		@atom = CMLed::Doc::Molecule::Atom.new(@doc.root)
 	end
 
-	describe '#complex[]' do
+	describe '#complex' do
 		shared_examples_for CMLed::Doc::Molecule::Atom::Complex do
 			it 'should return a proper Complex' do
 				axes.each do |axis|
 					@atom.complex[axis].should be_close value, 1e-6
 				end
 			end
+
+			describe '=' do
+				before :each do
+					@random = Complex(rand(),rand())
+				end
+
+				it 'should change coordinates value' do
+					@atom.complex[axes.first] = @random
+					@atom.complex[axes.first].should be_close @random, 1e-6
+				end
+			end
 		end
 
-		context 'with x axis' do
+		context 'with [x] axis' do
 			it_behaves_like CMLed::Doc::Molecule::Atom::Complex do
 				let(:axes){ ['x', 'X', :x , :X] }
 				let(:value){ Complex(2,3) }
 			end
 		end
 
-		context 'with y axis' do
+		context 'with [y] axis' do
 			it_behaves_like CMLed::Doc::Molecule::Atom::Complex do
 				let(:axes){ ['y', 'Y', :y , :Y] }
 				let(:value){ Complex(3,1) }
 			end
 		end
 
-		context 'with z axis' do
+		context 'with [z] axis' do
 			it_behaves_like CMLed::Doc::Molecule::Atom::Complex do
 				let(:axes){ ['z', 'Z', :z , :Z] }
 				let(:value){ Complex(1,2) }
