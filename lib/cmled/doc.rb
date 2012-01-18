@@ -43,10 +43,7 @@ module CMLed
 		end
 
 		def molecules
-			[@doc.get_elements('/molecule'),
-				@doc.get_elements('/cml/molecule')].flatten.compact.collect do |mol|
-				Molecule.new mol
-			end
+			each_molecule.to_a
 		end
 		
 		def rotate *args
