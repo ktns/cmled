@@ -72,6 +72,22 @@ describe CMLed::Doc do
 		end
 	end
 
+	describe '#translate' do
+		it 'should return translatedcml' do
+			@translateddoc = IO.popen("#{bin_path('translatecml')} z 1 < #{fixture_path('benzene.cml')} 2>/dev/null", 'r') do |io|
+				CMLed::Doc.new(io)
+			end
+			@translatedstr = @translateddoc.pretty
+			@doc.translate(:z,1).pretty.should == @translatedstr
+		end
+
+		it 'should not change original document' do
+			str = @doc.to_s
+			@doc.translate(:z,2)
+			@doc.to_s.should == str
+		end
+	end
+
 	describe '#rotate' do
 		it 'should return rotatedcml' do
 			@rotateddoc = IO.popen("#{bin_path('rotatecml')} x 90 < #{fixture_path('benzene.cml')} 2>/dev/null", 'r') do |io|
