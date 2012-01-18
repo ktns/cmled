@@ -40,7 +40,7 @@ module CMLed
 
 				rotator = Complex.polar(1, angle * 2 * Math::PI / 360)
 
-				@elem.get_elements('atomArray/atom').collect do |atom|
+				each_atoms do |atom|
 					x,y,z = coords.collect{|l| atom.attribute(l).to_s.to_f}
 					c     = Complex(x,y) * rotator
 					x,y   = c.real, c.imag
