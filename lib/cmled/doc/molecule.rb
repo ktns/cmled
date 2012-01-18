@@ -10,16 +10,16 @@ module CMLed
 			def initialize element
 				raise TypeError unless element.kind_of?(REXML::Element)
 				@elem = element
-				each_atoms do |atom|
+				each_atom do |atom|
 					atom.attributes.extend AtomAttributes
 				end
 			end
 
-			def each_atoms &block
+			def each_atom &block
 				if block
 					@elem.get_elements('atomArray/atom').each &block
 				else
-					Enumerator.new(self,each_atoms)
+					Enumerator.new(self,each_atom)
 				end
 			end
 
@@ -40,7 +40,7 @@ module CMLed
 
 				rotator = Complex.polar(1, angle * 2 * Math::PI / 360)
 
-				each_atoms do |atom|
+				each_atom do |atom|
 					x,y,z = coords.collect{|l| atom.attribute(l).to_s.to_f}
 					c     = Complex(x,y) * rotator
 					x,y   = c.real, c.imag
