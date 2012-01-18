@@ -39,7 +39,7 @@ EOF
 		shared_examples_for CMLed::Doc::Molecule::Atom::Complex do
 			it 'should return a proper Complex' do
 				axes.each do |axis|
-					@atom.complex[axis].should be_close value, 1e-6
+					@atom.complex[axis].should be_within(1e-6).of(value)
 				end
 			end
 
@@ -50,7 +50,7 @@ EOF
 
 				it 'should change coordinates value' do
 					@atom.complex[axes.first] = @random
-					@atom.complex[axes.first].should be_close @random, 1e-6
+					@atom.complex[axes.first].should be_within(1e-6).of(@random)
 				end
 			end
 		end
