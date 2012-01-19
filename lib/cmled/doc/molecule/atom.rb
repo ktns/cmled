@@ -94,10 +94,20 @@ module CMLed
 							@parent.attributes[l].to_s.to_f
 						end]
 					end
+
+					def []= axis, value
+						[Atom.labels(axis),value.to_a].transpose.each do |l,v|
+							@parent.attributes[l] = v
+						end
+					end
 				end
 
 				def vector
 					Vector.new(self)
+				end
+
+				def vector= value
+					Vector.new(self)[:x]=value
 				end
 
 				def attributes
