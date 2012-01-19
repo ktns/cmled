@@ -99,6 +99,17 @@ EOF
 					@atom.vector[axes.first].should be_within(1e-6).of(@random)
 				end
 			end
+
+			describe '*=' do
+				before :each do
+					@matrix = Matrix[*3.times.collect{3.times.collect{rand()}}]
+				end
+
+				it 'should multiply coordinates value' do
+					@atom.vector[axes.first] *= @matrix
+					@atom.vector[axes.first].should be_within(1e-6).of(@matrix * value)
+				end
+			end
 		end
 
 		context 'with [x] axis' do
