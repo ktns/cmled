@@ -1,5 +1,9 @@
 require File.expand_path(File.join(File.dirname(__FILE__), %w<..>*3, 'spec_helper'))
 
+class ::Vector
+	alias abs r
+end
+
 describe CMLed::Doc::Molecule::AtomAttributes do
 	before :each do
 		@doc = REXML::Document.new(<<EOF)
@@ -73,6 +77,48 @@ EOF
 			it_behaves_like CMLed::Doc::Molecule::Atom::Complex do
 				let(:axes){ ['z', 'Z', :z , :Z] }
 				let(:value){ Complex(1,2) }
+			end
+		end
+	end
+
+	describe '#vector' do
+		shared_examples_for CMLed::Doc::Molecule::Atom::Vector do
+			it 'should return a proper Vector' do
+				axes.each do |axis|
+					@atom.vector[axis].should be_within(1e-6).of(value)
+				end
+			end
+
+			describe '=' do
+				before :each do
+					@random = Vector[rand(),rand(),rand()]
+				end
+
+				it 'should change coordinates value' do
+					@atom.vector[axes.first] = @random
+					@atom.vector[axes.first].should be_within(1e-6).of(@random)
+				end
+			end
+		end
+
+		context 'with [x] axis' do
+			it_behaves_like CMLed::Doc::Molecule::Atom::Vector do
+				let(:axes){ ['x', 'X', :x , :X] }
+				let(:value){ Vector[1,2,3] }
+			end
+		end
+
+		context 'with [y] axis' do
+			it_behaves_like CMLed::Doc::Molecule::Atom::Vector do
+				let(:axes){ ['y', 'Y', :y , :Y] }
+				let(:value){ Vector[2,3,1] }
+			end
+		end
+
+		context 'with [z] axis' do
+			it_behaves_like CMLed::Doc::Molecule::Atom::Vector do
+				let(:axes){ ['z', 'Z', :z , :Z] }
+				let(:value){ Vector[3,1,2] }
 			end
 		end
 	end

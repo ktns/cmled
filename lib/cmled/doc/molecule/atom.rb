@@ -1,3 +1,5 @@
+require 'matrix'
+
 module CMLed
 	class Doc
 		class Molecule
@@ -79,6 +81,10 @@ module CMLed
 
 				def complex
 					Complex.new(self)
+				end
+
+				class Vector
+
 				end
 
 				def attributes
