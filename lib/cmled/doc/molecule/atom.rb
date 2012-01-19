@@ -84,7 +84,20 @@ module CMLed
 				end
 
 				class Vector
+					def initialize parent
+						raise TypeError unless parent.kind_of? Atom
+						@parent = parent
+					end
 
+					def [] axis = :x
+						::Vector[*Atom.labels(axis).collect do |l|
+							@parent.attributes[l].to_s.to_f
+						end]
+					end
+				end
+
+				def vector
+					Vector.new(self)
 				end
 
 				def attributes
