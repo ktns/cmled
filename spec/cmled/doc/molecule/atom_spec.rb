@@ -100,6 +100,18 @@ EOF
 				end
 			end
 
+			describe '*' do
+				before :all do
+					@matrix = Matrix.I(4)
+				end
+
+				it 'should raise error if dimension unmatched' do
+					proc do
+						@matrix * @atom.vector[axes.first]
+					end.should raise_error ExceptionForMatrix::ErrDimensionMismatch
+				end
+			end
+
 			describe '*=' do
 				before :each do
 					@matrix = Matrix[*3.times.collect{3.times.collect{rand()}}]
