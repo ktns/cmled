@@ -1,4 +1,6 @@
 require 'matrix'
+require 'cmled/doc/molecule/atom/complex'
+require 'cmled/doc/molecule/atom/vector'
 
 module CMLed
 	class Doc
@@ -56,64 +58,8 @@ module CMLed
 					end
 				end
 
-				class Complex
-					def initialize parent
-						raise TypeError unless parent.kind_of? Atom
-						@parent = parent
-					end
-
-					def self.labels axis
-						Atom.labels(axis)[1,2]
-					end
-
-					def [] axis
-						Complex(*Complex.labels(axis).collect do |l|
-							@parent.attributes[l].to_s.to_f
-						end)
-					end
-
-					def []= axis, value
-						[[value.real, value.imag], Complex.labels(axis)].transpose.each do |v,l|
-							@parent.attributes[l]=v
-						end
-					end
-				end
-
 				def complex
 					Complex.new(self)
-				end
-
-				class Vector
-					module CoVector
-						def * operand
-							begin
-								super
-							rescue ExceptionForMatrix::ErrDimensionMismatch => e
-								begin
-									operand * self
-								rescue ExceptionForMatrix::ErrDimensionMismatch
-									raise e
-								end
-							end
-						end
-					end
-
-					def initialize parent
-						raise TypeError unless parent.kind_of? Atom
-						@parent = parent
-					end
-
-					def [] axis = :x
-						::Vector[*Atom.labels(axis).collect do |l|
-							@parent.attributes[l].to_s.to_f
-						end].extend CoVector
-					end
-
-					def []= axis, value
-						[Atom.labels(axis),value.to_a].transpose.each do |l,v|
-							@parent.attributes[l] = v
-						end
-					end
 				end
 
 				def vector
