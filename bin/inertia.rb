@@ -32,6 +32,7 @@ $stderr.puts 'raw inertia:', MatrixFormat%raw_inertia.to_a.flatten
 begin
 	require 'gsl'
 rescue LoadError
+	require 'rubygems' and retry
 	exit 0
 end
 
