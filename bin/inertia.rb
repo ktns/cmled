@@ -16,10 +16,10 @@ doc = REXML::Document.new($stdin)
 
 points = MassPoints.new *(doc.get_elements('molecule/atomArray/atom').collect do |atom|
 	MassPoint.new(
+		MassTable[atom.attribute('elementType').to_s],
 		atom.attribute('x3').to_s.to_f,
 		atom.attribute('y3').to_s.to_f,
-		atom.attribute('z3').to_s.to_f,
-		MassTable[atom.attribute('elementType').to_s]
+		atom.attribute('z3').to_s.to_f
 	)
 end)
 
@@ -32,6 +32,7 @@ $stderr.puts 'raw inertia:', MatrixFormat%raw_inertia.to_a.flatten
 begin
 	require 'gsl'
 rescue LoadError
+	require 'rubygems' and retry
 	exit 0
 end
 

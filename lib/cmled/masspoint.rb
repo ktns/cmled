@@ -1,6 +1,6 @@
 module CMLed
 	class MassPoint
-		def initialize x,y,z,m
+		def initialize m,x,y,z
 			@m=m
 			@coords=Vector[x,y,z]
 		end
