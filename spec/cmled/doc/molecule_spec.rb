@@ -14,5 +14,11 @@ describe CMLed::Doc::Molecule do
 
 			it {should be_kind_of Enumerator}
 		end
+
+		it 'should enumerate CMLed::Doc::Molecule::Atom' do
+			@molecule.each_atom do |atom|
+				atom.should be_kind_of CMLed::Doc::Molecule::Atom
+			end
+		end
 	end
 end
