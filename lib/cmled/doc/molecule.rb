@@ -19,7 +19,7 @@ module CMLed
 				if block
 					@elem.get_elements('atomArray/atom').each &block
 				else
-					Enumerator.new(self,each_atom)
+					Enumerator.new(self,:each_atom)
 				end
 			end
 
