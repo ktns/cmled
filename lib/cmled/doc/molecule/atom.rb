@@ -77,6 +77,10 @@ module CMLed
 				def attribute key
 					@elem.attribute(key)
 				end
+
+				def element
+					@elem.attributes['elementType']
+				end
 			end
 		end
 	end
