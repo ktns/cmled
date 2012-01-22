@@ -24,6 +24,19 @@ def fixture_open *fn, &block
 	File.open(fixture_path(*fn),'r',&block)
 end
 
+def execute_file path, stdin=nil, stdout=nil, stderr=nil
+	begin
+		$stdin = stdin || StringIO.new('r')
+		$stdout = stdout || StringIO.new('w')
+		$stderr = stderr || StringIO.new('w')
+		load path
+	ensure
+		$stdin = STDIN
+		$stdout = STDOUT
+		$stderr = STDERR
+	end
+end
+
 class ::Vector
 	alias abs r
 end

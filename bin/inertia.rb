@@ -1,6 +1,8 @@
 #! /usr/bin/env ruby
 $LOAD_PATH << File.join(File.dirname(__FILE__), *%w<.. lib>)
 
+fail
+
 require 'rexml/document'
 require 'matrix'
 require 'cmled'
