@@ -1,4 +1,6 @@
 module CMLed
+	ZeroVector = Vector[0,0,0].freeze
+
 	class MassPoint
 		def initialize m,x,y,z
 			@m=m
