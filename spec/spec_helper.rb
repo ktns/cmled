@@ -24,6 +24,10 @@ def fixture_open *fn, &block
 	File.open(fixture_path(*fn),'r',&block)
 end
 
+class ::Vector
+	alias abs r
+end
+
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}

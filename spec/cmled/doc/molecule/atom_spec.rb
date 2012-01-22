@@ -1,9 +1,5 @@
 require File.expand_path(File.join(File.dirname(__FILE__), %w<..>*3, 'spec_helper'))
 
-class ::Vector
-	alias abs r
-end
-
 describe CMLed::Doc::Molecule::AtomAttributes do
 	before :each do
 		@doc = REXML::Document.new(<<EOF)
