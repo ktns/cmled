@@ -17,7 +17,9 @@ module CMLed
 
 			def each_atom &block
 				if block
-					@elem.get_elements('atomArray/atom').each &block
+					@elem.get_elements('atomArray/atom').each do |atom|
+						block.call Atom.new(atom)
+					end
 				else
 					Enumerator.new(self,:each_atom)
 				end

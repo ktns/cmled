@@ -73,6 +73,10 @@ module CMLed
 				def attributes
 					@elem.attributes.extend AtomAttributes
 				end
+
+				def attribute key
+					@elem.attribute(key)
+				end
 			end
 		end
 	end
