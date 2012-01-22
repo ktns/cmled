@@ -15,6 +15,6 @@ describe CMLed::MassPoints do
 
 		subject {@masspoints}
 
-		its(:center) {should be_within(1e-6).of(Vector[0,0,0])}
+		its(:center) {should be_within(1e-4).of(Vector[0,0,0])}
 	end
 end
