@@ -44,3 +44,6 @@ module CMLed
 		end
 	end
 end
+
+require 'cmled/masspoint/molecule'
+require 'cmled/masspoint/atom'
