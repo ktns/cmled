@@ -10,16 +10,10 @@ include CMLed
 
 MatrixFormat = ((('% 11.3f '*3).rstrip+"\n")*3).freeze
 
-doc = REXML::Document.new($stdin)
+doc = Doc.new($stdin)
 
-points = MassPoints.new *(doc.get_elements('molecule/atomArray/atom').collect do |atom|
-	MassPoint.new(
-		MassTable[atom.attribute('elementType').to_s],
-		atom.attribute('x3').to_s.to_f,
-		atom.attribute('y3').to_s.to_f,
-		atom.attribute('z3').to_s.to_f
-	)
-end)
+molecule = doc.each_molecule.first
+points = molecule.masspoints
 
 $stderr.puts 'center of gravity = ' + (['%8.3f']*3).join(', ') % points.center.to_a
 
@@ -43,14 +37,11 @@ GSL::Eigen::symmv_sort(evals,evects)
 	$stderr.puts 'I%d: %8.3f, axis(% 7f, % 7f, % 7f)' % [i+1, val, *vec]
 end
 
-evects*=GSL::Matrix.diagonal(-1,1,1) if evects.det < 0
-center=GSL::Vector[*points.center.to_a]
-doc.get_elements('molecule/atomArray/atom').each do |atom|
-	v=GSL::Vector[*%w<x3 y3 z3>.collect{|l| atom.attribute(l).to_s.to_f}]
-	v-=center
-	v*=evects
-	[%w<x3 y3 z3>, v.to_a].transpose.each do |l,v|
-		atom.attributes[l]=v
-	end
+evects *= GSL::Matrix.diagonal(-1,1,1) if evects.det < 0
+evects  = Matrix[*evects.to_a]
+center  = Vector[*points.center.to_a]
+molecule.each_atom do |atom|
+	atom.vector[:x]-=center
+	atom.vector[:x]*=evects
 end
 puts doc
