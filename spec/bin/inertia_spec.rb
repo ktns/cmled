@@ -4,8 +4,10 @@ describe 'executable file `inertia.rb\'' do
 	@@path = bin_path('inertia.rb')
 
 	it 'should not raise error' do
-		lambda do
-			execute_file @@path
-		end.should_not raise_error
+		fixture_open 'benzene.cml' do |f|
+			lambda do
+				execute_file @@path, f
+			end.should_not raise_error
+		end
 	end
 end
