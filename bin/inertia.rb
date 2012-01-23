@@ -10,8 +10,6 @@ include CMLed
 
 MatrixFormat = ((('% 11.3f '*3).rstrip+"\n")*3).freeze
 
-ZeroVector=Vector[0,0,0].freeze
-
 doc = REXML::Document.new($stdin)
 
 points = MassPoints.new *(doc.get_elements('molecule/atomArray/atom').collect do |atom|
