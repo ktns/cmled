@@ -95,7 +95,12 @@ module CMLed
 		end
 
 		def add! operand
-
+			molecules.each do |mol|
+				mol.atoms.each do |atom|
+					atom.vector[:x] += operand
+				end
+			end
+			self
 		end
 
 		def * operand
