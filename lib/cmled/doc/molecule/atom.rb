@@ -103,6 +103,10 @@ module CMLed
 					@elem.attributes['elementType']
 				end
 
+				def id
+					@elem.attributes['id'].extend AtomID
+				end
+
 				def die!
 					@elem.parent.delete @elem
 				end
