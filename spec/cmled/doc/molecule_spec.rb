@@ -15,6 +15,17 @@ describe CMLed::Doc::Molecule do
 			it {should be_kind_of Enumerator}
 		end
 
+		context 'after #atoms' do
+			it 'should reuse atom objects' do
+				@molecule.atoms.each do |atom|
+					atom.should_receive(:hoge)
+				end
+				@molecule.each_atom do |atom|
+					atom.hoge
+				end
+			end
+		end
+
 		it 'should enumerate CMLed::Doc::Molecule::Atom' do
 			@molecule.each_atom do |atom|
 				atom.should be_kind_of CMLed::Doc::Molecule::Atom
