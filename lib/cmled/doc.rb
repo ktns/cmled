@@ -84,6 +84,14 @@ module CMLed
 			end
 			self
 		end
+
+		def * operand
+			dup.multiply! operand
+		end
+
+		def multiply! operand
+
+		end
 	end
 end
 

@@ -125,4 +125,18 @@ describe CMLed::Doc do
 			@doc.to_s.should == str
 		end
 	end
+
+	describe '#*=' do
+		it 'should invoke Atom#vector[]= of all atom' do
+			matrix = Matrix.I(3)
+			@doc.each_molecule do |mol|
+				mol.each_atom do |atom|
+					vector = stub(:vector)
+					vector.should_receive(:[]=).with(:x, matrix)
+					atom.should_receive(:vector).and_return vector
+				end
+			end
+			@doc *= matrix
+		end
+	end
 end
