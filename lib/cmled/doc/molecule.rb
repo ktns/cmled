@@ -30,7 +30,7 @@ module CMLed
 			end
 
 			def atoms
-				@atoms or @atoms = each_atom.to_a
+				@atoms or @atoms = each_atom.to_a.sort_by(&:id)
 			end
 
 			def translate! axis, length
