@@ -40,9 +40,22 @@ module CMLed
 			module AtomID
 				include Comparable
 
-				def <=> other
-
+				def self.extended str
+					unless str.instance_of? String
+						raise TypeError, 'Expected String, but %p!' % str
+					end
+					unless str =~ /\Aa(\d+)\Z/
+						raise ArgumentError, 'Invalid string for AtomID! (%s)' % str
+					end
 				end
+
+				def <=> other
+					raise TypeError, 'Expected AtomID, but %p!' % other unless other.kind_of? AtomID
+					:<=>.to_proc.call(*[self,other].collect{|str| str.scan(/\d+/)}.flatten.collect(&:to_i))
+				end
+
+				protected
+				attr_reader :num
 			end
 
 			class Atom
