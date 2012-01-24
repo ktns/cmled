@@ -153,6 +153,22 @@ describe CMLed::Doc do
 		end
 	end
 
+	describe '#subtract!' do
+		it 'should invoke Atom#vector[]-= of all atom' do
+			@vector = stub(:vector)
+			@doc.molecules.each do |mol|
+				mol.atoms.each do |atom|
+					vector = stub(:vector)
+					vector.should_receive(:[]).with(:x).and_return vector
+					vector.should_receive(:-).with(@vector).and_return vector
+					vector.should_receive(:[]=).with(:x, vector)
+					atom.should_receive(:vector).and_return vector
+				end
+			end
+			@doc.subtract! @vector
+		end
+	end
+
 	describe '#multiply!' do
 		it 'should invoke Atom#vector[]*= of all atom' do
 			matrix = Matrix.I(3)
