@@ -59,6 +59,17 @@ describe CMLed::Doc do
 			end
 		end
 
+		context 'after #molecules' do
+			it 'should reuse molecule objects' do
+				@doc.molecules.each do |mol|
+					mol.should_receive(:hoge)
+				end
+				@doc.each_molecule do |mol|
+					mol.hoge
+				end
+			end
+		end
+
 		it 'should enumerate CMLed::DocDoc::Molecule' do
 			@doc.each_molecule do |m|
 				m.should be_instance_of CMLed::Doc::Molecule
