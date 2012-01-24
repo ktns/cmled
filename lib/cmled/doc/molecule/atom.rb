@@ -37,6 +37,14 @@ module CMLed
 				end
 			end
 
+			module AtomID
+				include Comparable
+
+				def <=> other
+
+				end
+			end
+
 			class Atom
 				def initialize elem
 					raise TypeError unless elem.kind_of? REXML::Element

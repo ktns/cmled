@@ -27,6 +27,36 @@ EOF
 	end
 end
 
+describe CMLed::Doc::Molecule::AtomID do
+	before do
+		@a1,@a2,@a10 = %w<a1 a2 a10>.collect{|a| a.extend CMLed::Doc::Molecule::AtomID}
+	end
+
+	describe 'a1' do
+		subject{@a1}
+
+		it {should < @a2}
+
+		it {should < @a10}
+	end
+
+	describe 'a2' do
+		subject{@a2}
+
+		it {should > @a1}
+
+		it {should < @a10}
+	end
+
+	describe 'a10' do
+		subject{@a10}
+
+		it {should > @a1}
+
+		it {should > @a2}
+	end
+end
+
 describe CMLed::Doc::Molecule::Atom do
 	before :each do
 		@doc = REXML::Document.new(<<EOF)
