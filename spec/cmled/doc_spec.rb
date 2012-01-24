@@ -109,4 +109,20 @@ describe CMLed::Doc do
 			@doc.to_s.should == str
 		end
 	end
+
+	describe '#filter' do
+		it 'should return filtered cml' do
+			@doc.filter('H').each_molecule do |mol|
+				mol.each_atom do |atom|
+					atom.element.should_not == 'H'
+				end
+			end
+		end
+
+		it 'should not change original document' do
+			str = @doc.to_s
+			@doc.filter('H')
+			@doc.to_s.should == str
+		end
+	end
 end

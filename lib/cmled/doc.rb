@@ -73,6 +73,10 @@ module CMLed
 			end
 			self
 		end
+
+		def filter element
+			self
+		end
 	end
 end
 
