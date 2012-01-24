@@ -77,7 +77,11 @@ module CMLed
 			end
 
 			def filter! element
-
+				each_atom do |atom|
+					if atom.element == element
+						atom.die!
+					end
+				end
 			end
 
 			def == other

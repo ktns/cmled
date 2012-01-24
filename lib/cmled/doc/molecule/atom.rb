@@ -81,6 +81,10 @@ module CMLed
 				def element
 					@elem.attributes['elementType']
 				end
+
+				def die!
+					@elem.parent.delete @elem
+				end
 			end
 		end
 	end
