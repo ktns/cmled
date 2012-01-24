@@ -138,7 +138,7 @@ describe CMLed::Doc do
 	end
 
 	describe '#multiply!' do
-		it 'should invoke Atom#vector[]= of all atom' do
+		it 'should invoke Atom#vector[]*= of all atom' do
 			matrix = Matrix.I(3)
 			@doc.molecules.each do |mol|
 				mol.atoms.each do |atom|
