@@ -33,6 +33,14 @@ describe CMLed::Doc::Molecule do
 		end
 	end
 
+	describe '#atoms' do
+		it 'should be sorted by id' do
+			@molecule.atoms.inject do |a,b|
+				a.id.should < b.id
+			end
+		end
+	end
+
 	describe '#filter!' do
 		context 'H' do
 			it 'should filter out H atoms from molecule'  do
