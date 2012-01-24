@@ -35,8 +35,10 @@ describe CMLed::Doc::Molecule do
 
 	describe '#atoms' do
 		it 'should be sorted by id' do
-			@molecule.atoms.inject do |a,b|
+			@molecule.each_atom.first.id.sub!(/\d+/,'30')
+			@molecule.dup.atoms.inject do |a,b|
 				a.id.should < b.id
+				b
 			end
 		end
 	end
