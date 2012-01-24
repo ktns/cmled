@@ -95,7 +95,13 @@ module CMLed
 		end
 
 		def multiply! operand
-
+			molecules.each do |mol|
+				mol.atoms.each do |atom|
+					p atom.object_id
+					atom.vector[:x] *= operand
+				end
+			end
+			self
 		end
 	end
 end
