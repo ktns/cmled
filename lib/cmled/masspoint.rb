@@ -1,3 +1,5 @@
+require 'gsl'
+
 module CMLed
 	ZeroVector = Vector[0,0,0].freeze
 
@@ -41,6 +43,22 @@ module CMLed
 			@points.inject(Matrix.zero(3)) do |inertia, point|
 				inertia + point.inertia(center)
 			end
+		end
+
+		def diagonalize_inertia
+			inertia = GSL::Matrix[*inertia().to_a]
+			evals, evects = inertia.eigen_symmv
+			GSL::Eigen::symmv_sort(evals,evects)
+			[evals, evects]
+		end
+
+		def principal_inertia
+			diagonalize_inertia.first.to_a
+		end
+
+		def principal_axes
+			_,evects = diagonalize_inertia
+			Matrix[*evects.to_a]
 		end
 	end
 end
