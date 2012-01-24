@@ -17,12 +17,20 @@ module CMLed
 
 			def each_atom &block
 				if block
-					@elem.get_elements('atomArray/atom').each do |atom|
-						block.call Atom.new(atom)
+					if @atoms
+						@atoms.each &block
+					else
+						@elem.get_elements('atomArray/atom').each do |atom|
+							block.call Atom.new(atom)
+						end
 					end
 				else
 					Enumerator.new(self,:each_atom)
 				end
+			end
+
+			def atoms
+				@atoms or @atoms = each_atom.to_a
 			end
 
 			def translate! axis, length
