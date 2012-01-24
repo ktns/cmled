@@ -21,6 +21,7 @@ module CMLed
 		def initialize_copy obj
 			super
 			@doc = REXML::Document.new(@doc.to_s)
+			@molecules = nil
 		end
 
 		def to_s
@@ -40,16 +41,20 @@ module CMLed
 
 		def each_molecule &block
 			if block
-				proc=proc{|elem| block.call Molecule.new(elem)}
-				@doc.get_elements('/molecule').each &proc
-				@doc.get_elements('/cml/molecule').each &proc
+				if @molecules
+					@molecules.each &block
+				else
+					proc=proc{|elem| block.call Molecule.new(elem)}
+					@doc.get_elements('/molecule').each &proc
+					@doc.get_elements('/cml/molecule').each &proc
+				end
 			else
 				Enumerator.new(self,:each_molecule)
 			end
 		end
 
 		def molecules
-			each_molecule.to_a
+			@molecules or @molecules = each_molecule.to_a
 		end
 
 		def translate *args
