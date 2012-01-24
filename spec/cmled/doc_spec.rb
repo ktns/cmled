@@ -143,7 +143,9 @@ describe CMLed::Doc do
 			@doc.molecules.each do |mol|
 				mol.atoms.each do |atom|
 					vector = stub(:vector)
-					vector.should_receive(:[]=).with(:x, matrix)
+					vector.should_receive(:[]).with(:x).and_return vector
+					vector.should_receive(:*).with(matrix).and_return vector
+					vector.should_receive(:[]=).with(:x, vector)
 					atom.should_receive(:vector).and_return vector
 				end
 			end
