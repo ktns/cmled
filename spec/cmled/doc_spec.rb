@@ -21,6 +21,12 @@ describe CMLed::Doc do
 				CMLed::Doc.new 'hoge'
 			end.should raise_error
 		end
+
+		it 'should accept path to fixture/benzene.cml' do
+			lambda do
+				CMLed::Doc.new fixture_path('benzene.cml')
+			end.should_not raise_error
+		end
 	end
 
 	describe '#pretty' do
