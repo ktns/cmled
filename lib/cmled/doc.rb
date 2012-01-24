@@ -90,6 +90,14 @@ module CMLed
 			self
 		end
 
+		def + operand
+			dup.add! operand
+		end
+
+		def add! operand
+
+		end
+
 		def * operand
 			dup.multiply! operand
 		end
