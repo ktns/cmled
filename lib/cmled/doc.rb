@@ -74,7 +74,14 @@ module CMLed
 			self
 		end
 
-		def filter element
+		def filter *args, &block
+			dup.filter! *args, &block
+		end
+
+		def filter! *args, &block
+			each_molecule do |mol|
+				mol.filter! *args, &block
+			end
 			self
 		end
 	end
