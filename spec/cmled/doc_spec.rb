@@ -137,7 +137,7 @@ describe CMLed::Doc do
 		end
 	end
 
-	describe '#*=' do
+	describe '#multiply!' do
 		it 'should invoke Atom#vector[]= of all atom' do
 			matrix = Matrix.I(3)
 			@doc.molecules.each do |mol|
@@ -147,7 +147,7 @@ describe CMLed::Doc do
 					atom.should_receive(:vector).and_return vector
 				end
 			end
-			@doc *= matrix
+			@doc.multiply! matrix
 		end
 	end
 end
