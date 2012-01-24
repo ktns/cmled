@@ -108,6 +108,11 @@ module CMLed
 		end
 
 		def subtract! operand
+			molecules.each do |mol|
+				mol.atoms.each do |atom|
+					atom.vector[:x] -= operand
+				end
+			end
 			self
 		end
 
