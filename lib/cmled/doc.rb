@@ -8,7 +8,13 @@ end
 module CMLed
 	class Doc
 		def initialize *args
-			@doc = REXML::Document.new(*args)
+			if args.first.kind_of?(String) && File.readable?(args.first)
+				File.open(args.shift, 'r') do |f|
+					@doc = REXML::Document.new(f,*args)
+				end
+			else
+				@doc = REXML::Document.new(*args)
+			end
 			raise ArgumentError if molecules.empty?
 		end
 
