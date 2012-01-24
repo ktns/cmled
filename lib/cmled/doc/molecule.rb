@@ -76,6 +76,10 @@ module CMLed
 				end
 			end
 
+			def filter! element
+
+			end
+
 			def == other
 				rexml_element == other.rexml_element
 			end

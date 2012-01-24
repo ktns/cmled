@@ -21,4 +21,15 @@ describe CMLed::Doc::Molecule do
 			end
 		end
 	end
+
+	describe '#filter!' do
+		context 'H' do
+			it 'should filter out H atoms from molecule'  do
+				@molecule.filter!('H')
+				@molecule.each_atom do |atom|
+					atom.element.should_not == 'H'
+				end
+			end
+		end
+	end
 end
