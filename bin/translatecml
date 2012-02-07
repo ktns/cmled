@@ -5,7 +5,7 @@ require 'cmled'
 axis=ARGV.shift
 
 length = ARGV.shift.to_f
-$stderr.puts 'translate %f along the %s-axis' % [length, $axis]
+$stderr.puts 'translate %f along the %s-axis' % [length, axis]
 
 doc = CMLed::Doc.new(ARGF)
 doc.translate!(axis, length)
