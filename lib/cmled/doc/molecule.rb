@@ -84,6 +84,10 @@ module CMLed
 				end
 			end
 
+			def mirror! plane
+
+			end
+
 			def filter! element
 				each_atom do |atom|
 					if atom.element == element
