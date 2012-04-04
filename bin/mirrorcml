@@ -1,0 +1,12 @@
+#! /usr/bin/env ruby
+$LOAD_PATH << File.join(File.dirname(__FILE__), *%w<.. lib>)
+require 'cmled'
+
+plane=ARGV.shift
+
+$stderr.puts 'mirror at %s plane' % plane
+
+doc = CMLed::Doc.new(ARGF)
+doc.mirror!(plane)
+
+doc.write($stdout)
