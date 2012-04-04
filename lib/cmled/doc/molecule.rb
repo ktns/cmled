@@ -85,7 +85,20 @@ module CMLed
 			end
 
 			def mirror! plane
-
+				case plane
+				when /\Axy|yx\Z/i
+					axis = 'z3'
+				when /\Ayz|zy\Z/i
+					axis = 'x3'
+				when /\Azx|xz\Z/i
+					axis = 'y3'
+				else
+					raise '`%s\' is not acceptable plane identifier!' % plane
+				end
+				each_atom do |atom|
+					atom.attributes[axis]=
+						atom.attributes[axis].to_f * -1
+				end
 			end
 
 			def filter! element

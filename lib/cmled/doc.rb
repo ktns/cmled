@@ -79,6 +79,17 @@ module CMLed
 			self
 		end
 
+		def mirror *args
+			dup.mirror! *args
+		end
+
+		def mirror! *args
+			each_molecule do |mol|
+				mol.mirror! *args
+			end
+			self
+		end
+
 		def filter *args, &block
 			dup.filter! *args, &block
 		end
