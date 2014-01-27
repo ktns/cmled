@@ -5,15 +5,25 @@ require 'rexml/document'
 require 'matrix'
 require 'cmled'
 require 'cmled/masspoint'
+require 'optparse'
 
 include CMLed
 
+opt = OptionParser.new
+inertiafile,inertiadoc,inertiamol = [nil]*3
+opt.on('-i FILE', 'read inertia from FILE instead of input molecule') do |v|
+  inertiafile = v
+  inertiadoc  = Doc.new(v)
+  inertiamol  = inertiadoc.each_molecule.first
+end
+opt.parse!(ARGV)
+
 MatrixFormat = ((('% 11.3f '*3).rstrip+"\n")*3).freeze
 
-doc = Doc.new($stdin)
+doc = Doc.new(ARGF)
 
 molecule = doc.each_molecule.first
-points = molecule.masspoints
+points = (inertiamol or molecule).masspoints
 
 $stderr.puts 'center of gravity = ' + (['%8.3f']*3).join(', ') % points.center.to_a
 
