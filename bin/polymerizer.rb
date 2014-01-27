@@ -25,11 +25,12 @@ class Unit
 		def initialize bond, assoc
 			@arefs = bond.attributes['atomRefs2'].split(' ')
 			@atoms = @arefs.collect{|ref| assoc[ref]}
+			@order = bond.attributes['order']
 			@atoms.freeze
 			self.freeze
 		end
 
-		attr_reader :atoms
+		attr_reader :atoms, :order
 	end
 
 	def initialize doc
@@ -80,16 +81,18 @@ class Polymer
 	end
 
 	class Bond
-		def initialize atoms
+		def initialize atoms, order=1
 			raise ArgumentError if atoms.size!=2
 			raise ArgumentError, '%p contains nil!' % [atoms] if atoms.include? nil
 			@atoms=atoms.freeze
+      @order=order
 			freeze
 		end
 
 		def to_elem
 			elem=REXML::Element.new('bond')
 			elem.add_attribute('atomRefs2', @atoms.collect(&:newid).join(' '))
+			elem.add_attribute('order', @order)
 			elem
 		end
 	end
@@ -110,7 +113,7 @@ class Polymer
 			end
 			unit.bonds.each do |bond|
 				atoms=bond.atoms.collect{|atom|assoc[atom]}
-				@bonds << Bond.new(atoms)
+				@bonds << Bond.new(atoms, bond.order)
 			end
 			prevbondsatoms=unit.nextbonds.collect do |bond|
 				bond.atoms.collect{|atom|assoc[atom]}
