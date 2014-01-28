@@ -4,7 +4,7 @@ $LOAD_PATH << File.join(File.dirname(__FILE__), *%w<.. lib>)
 require 'rexml/document'
 require 'matrix'
 require 'cmled'
-require 'cmled/masspoint'
+require 'cmled/inertia'
 require 'optparse'
 
 include CMLed
@@ -15,6 +15,12 @@ opt.on('-i FILE', 'read inertia from FILE instead of input molecule') do |v|
   inertiafile = v
   inertiadoc  = Doc.new(v)
   inertiamol  = inertiadoc.each_molecule.first
+end
+alignfile,aligndoc,alignmol = [nil]*3
+opt.on('-a FILE', 'align input molecule to inertial axis read from FILE') do |v|
+  alignfile = v
+  aligndoc  = Doc.new(v)
+  alignmol  = aligndoc.each_molecule.first
 end
 opt.parse!(ARGV)
 
@@ -31,27 +37,23 @@ raw_inertia = points.inertia
 
 $stderr.puts 'raw inertia:', MatrixFormat%raw_inertia.to_a.flatten
 
-begin
-	require 'gsl'
-rescue LoadError
-	require 'rubygems' and retry
-	exit 0
-end
+center  = Vector[*points.center.to_a]
 
 $stderr.puts 'diagonalized inertia:'
-raw_inertia  = GSL::Matrix[*raw_inertia.to_a]
-evals, evects = raw_inertia.eigen_symmv
-GSL::Eigen::symmv_sort(evals,evects)
-[evals.to_a, evects.transpose.to_a].transpose.each_with_index do |valvec,i|
-	val,vec=valvec
-	$stderr.puts 'I%d: %8.3f, axis(% 7f, % 7f, % 7f)' % [i+1, val, *vec]
+include CMLed::Inertia
+evals, evects = eigeninertia raw_inertia
+putseigeninertia evals, evects, $stderr
+
+aligncenter, alignevects = [nil]*2
+if alignmol
+  alignpoints  = alignmol.masspoints
+  aligncenter  = alignpoints.center
+  aligninertia = alignpoints.inertia
+  alignevals, alignevects = eigeninertia aligninertia
+  $stderr.puts 'aligns to center of gravity = ' + (['%8.3f']*3).join(', ') % aligncenter.to_a
+  $stderr.puts 'aligns to following inertial frame:'
+  putseigeninertia alignevals, alignevects
 end
 
-evects *= GSL::Matrix.diagonal(-1,1,1) if evects.det < 0
-evects  = Matrix[*evects.to_a]
-center  = Vector[*points.center.to_a]
-molecule.each_atom do |atom|
-	atom.vector[:x]-=center
-	atom.vector[:x]*=evects
-end
+alignmolecule center, evects, molecule, aligncenter, alignevects
 puts doc
